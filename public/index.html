@@ -5,16 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Broken Picture Phone</title>
   <style>
+    #start-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
     canvas {
+      display: none;
       border: 1px solid black;
     }
   </style>
 </head>
 <body>
+  <div id="start-screen">
+    <h1>Welcome to Broken Picture Phone</h1>
+    <form id="username-form">
+      <label for="username">Enter your username:</label>
+      <input type="text" id="username" required>
+      <button type="submit">Start Drawing</button>
+    </form>
+  </div>
+
   <canvas id="canvas" width="800" height="600"></canvas>
   
   <script src="/socket.io/socket.io.js"></script>
   <script>
+    const startScreen = document.getElementById('start-screen');
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
 
@@ -22,6 +40,16 @@
 
     let drawing = false;
     let lastX, lastY;
+
+    document.getElementById('username-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      if (username.trim() !== '') {
+        startScreen.style.display = 'none';
+        canvas.style.display = 'block';
+        canvas.focus();
+      }
+    });
 
     canvas.addEventListener('mousedown', (e) => {
       drawing = true;
